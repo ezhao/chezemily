@@ -23,6 +23,10 @@ def about():
 def studio():
     return render_template('studio.html')
 
-if __name__ == '__main__':
+def run_for_real():
     app.debug = False
+    app.run()
+
+if __name__ == '__main__':
+    app.debug = True
     app.run()
