@@ -2,6 +2,7 @@ body {
    background-color:#b0c32d;
 }
 
-h1 {
-   background-color: #FF0000;
+#footer {
+   padding-top:36px;
+   padding-bottom:24px;
 }
