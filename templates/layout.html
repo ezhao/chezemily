@@ -1,46 +1,49 @@
 <!doctype html>
 <html>
-  <head>
-    {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
-    <title>{% block title %}{% endblock %} - Emily</title>
-    {% endblock %}
-  </head>
-  <body>
-	<nav class="navbar navbar-default" role="navigation">
-	  <div class="container-fluid">
-	    <!-- Brand and toggle get grouped for better mobile display -->
-	    <div class="navbar-header">
-	      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-	        <span class="sr-only">Toggle navigation</span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	        <span class="icon-bar"></span>
-	      </button>
-	      <span class="navbar-brand">Emily Zhao</span><!-- a href="#"-->
-	    </div>
+	<head>
+		{% block head %}
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<title>{% block title %}{% endblock %} - Emily</title>
+		{% endblock %}
+	</head>
+	<body>
+		<nav class="navbar navbar-default" role="navigation">
+			<div class="container-fluid">
+				<!-- Brand and toggle get grouped for better mobile display -->
+				<div class="navbar-header">
+					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+						<span class="sr-only">Toggle navigation</span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+						<span class="icon-bar"></span>
+					</button>
+					<span class="navbar-brand">Emily Zhao</span><!-- a href="#"-->
+				</div>
 
-	    <!-- Collect the nav links, forms, and other content for toggling -->
-	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-	      <ul class="nav navbar-nav">
-	        <li><a href="/blog">Blog</a></li><!-- li class="active" -->
-	        <li><a href="/studio">Studio</a></li>
-	      </ul>
-	      <ul class="nav navbar-nav navbar-right">
-	        <li><a href="/about">About</a></li>
-	      </ul>
-	    </div><!-- /.navbar-collapse -->
-	  </div><!-- /.container-fluid -->
-	</nav>
+				<!-- Collect the nav links, forms, and other content for toggling -->
+				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+					<ul class="nav navbar-nav">
+						<li><a href="/blog">Blog</a></li><!-- li class="active" -->
+						<li><a href="/studio">Studio</a></li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="/about">About</a></li>
+					</ul>
+				</div><!-- /.navbar-collapse -->
+			</div><!-- /.container-fluid -->
+		</nav>
 
-    <div id="content">{% block content %}{% endblock %}</div>
-    <div id="footer" class="center-block">
-      {% block footer %}
-	  <p class="text-center">&copy; Copyright 2014 by <a href="/">Emily</a>.</p>
-	  {% endblock %}
-    </div>
-  </body>
+		<div id="content">
+			{% for message in get_flashed_messages() %}<div class=flash>{{ message }}</div>{% endfor %}
+			{% block content %}{% endblock %}
+		</div>
+		<div id="footer" class="center-block">
+			{% block footer %}
+			<p class="text-center">&copy; Copyright 2014 by <a href="/">Emily</a>.</p>
+			{% endblock %}
+		</div>
+	</body>
 </html>
