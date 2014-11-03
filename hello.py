@@ -43,10 +43,6 @@ def close_db(error):
     if hasattr(g, 'sqlite_db'):
         g.sqlite_db.close()
 
-@app.route('/worth_a_shot')
-def worth_a_shot():
-    init_db()
-
 
 # Routes for fake blog application and other testing
 @app.route('/app')
