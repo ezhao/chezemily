@@ -55,6 +55,7 @@ def show_entries():
 def add_entry():
     if not session.get('logged_in'):
         abort(401)
+    print "emily logging that we checked login in add_entry()"
     db = get_db()
     db.execute('insert into entries (title, text) values (?, ?)',
                  [request.form['title'], request.form['text']])
