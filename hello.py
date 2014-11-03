@@ -11,8 +11,8 @@ app.config.from_object(__name__)
 app.config.update(dict(
     DATABASE=os.path.join(app.root_path, 'flaskr.db'), #TODO(emily) investigate "Instance Folders"
     SECRET_KEY='2g2JXhqfutWCzRBAnuUpTRVNoneadventureatatimebaconandburrata',
-    USERNAME='admin',
-    PASSWORD='default'
+    USERNAME='snowman',
+    PASSWORD='pumpkin'
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
@@ -103,6 +103,13 @@ def about():
 @app.route('/studio/')
 def studio():
     return render_template('studio.html')
+
+@app.route('/project/<project>/')
+def project(project=None):
+    print project
+    if project == 'setlist':
+        return render_template('setlist.html')
+    return render_template('hello.html', name='test')
 
 
 # Run
