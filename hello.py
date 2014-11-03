@@ -46,8 +46,11 @@ def close_db(error):
 # Routes for fake blog application and other testing
 @app.route('/app')
 def show_entries():
+    print "emily logging that we called show_entries()"
     db = get_db()
+    print "emily logging that we called get_db()"
     cur = db.execute('select title, text from entries order by id desc')
+    print "emily logging that we called db.execute()"
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
@@ -55,7 +58,6 @@ def show_entries():
 def add_entry():
     if not session.get('logged_in'):
         abort(401)
-    print "emily logging that we checked login in add_entry()"
     db = get_db()
     db.execute('insert into entries (title, text) values (?, ?)',
                  [request.form['title'], request.form['text']])
