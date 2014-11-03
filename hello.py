@@ -47,11 +47,8 @@ def close_db(error):
 # Routes for fake blog application and other testing
 @app.route('/app')
 def show_entries():
-    print "emily logging that we called show_entries()"
     db = get_db()
-    print "emily logging that we called get_db()"
     cur = db.execute('select title, text from entries order by id desc')
-    print "emily logging that we called db.execute()"
     entries = cur.fetchall()
     return render_template('show_entries.html', entries=entries)
 
@@ -110,7 +107,6 @@ def studio():
 
 @app.route('/project/<project>/')
 def project(project=None):
-    print project
     if project == 'setlist':
         return render_template('setlist.html')
     return render_template('hello.html', name='test')
@@ -122,5 +118,5 @@ def run_for_test():
     app.run()
 
 if __name__ == '__main__':
-    app.debug = False
+    app.debug = False # Only deploy with "False"
     app.run()
