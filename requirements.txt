@@ -4,7 +4,9 @@ Jinja2==2.7.3
 MarkupSafe==0.23
 SQLAlchemy==0.9.8
 Werkzeug==0.9.6
+gnureadline==6.3.3
 gunicorn==19.1.1
+ipython==2.3.0
 itsdangerous==0.24
 psycopg2==2.5.4
 wsgiref==0.1.2
