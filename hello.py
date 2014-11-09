@@ -17,14 +17,19 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-def init_db():
-    print os.environ['DATABASE_URL']
-    with app.app_context():
-        db = get_db()
-        db.create_all()
 
+############################
+# Database related stuff   #
+############################
 db = SQLAlchemy(app)
 
+def init_db():
+    db.create_all()
+
+
+############################
+# Models models models     #
+############################
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80))
@@ -37,42 +42,37 @@ class User(db.Model):
     def __repr__(self):
         return '<Name %r>' % self.name
 
-def get_db():
-    """Opens a new database connection if there is none yet for the
-    current application context.
-    """
-    if not hasattr(g, 'postgresql_db'):
-        g.postgresql_db = SQLAlchemy(app)
-    return g.postgresql_db
 
-'''
-@app.teardown_appcontext
-def close_db(error):
-    """Closes the database again at the end of the request."""
-    if hasattr(g, 'sqlite_db'):
-        g.sqlite_db.close()
+class Entries(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(80))
+    text = db.Column(db.String(80))
 
-'''
+    def __init__(self, title, text):
+        self.title = title
+        self.text = text
+
+    def __repr__(self):
+        return '<Title %r>' % self.title
 
 
-'''
-
+############################
+# Pull this stuff together #
+############################
 # Routes for fake blog application and other testing
 @app.route('/app')
 def show_entries():
-    db = get_db()
-    cur = db.execute('select title, text from entries order by id desc')
-    entries = cur.fetchall()
+    entries = Entries.query.all()
+    print entries
     return render_template('show_entries.html', entries=entries)
 
 @app.route('/app/add', methods=['POST'])
 def add_entry():
     if not session.get('logged_in'):
         abort(401)
-    db = get_db()
-    db.execute('insert into entries (title, text) values (?, ?)',
-                 [request.form['title'], request.form['text']])
-    db.commit()
+    new_entry = Entries(request.form['title'], request.form['text'])
+    db.session.add(new_entry)
+    db.session.commit()
     flash('New entry was successfully posted')
     return redirect(url_for('show_entries'))
 
@@ -95,8 +95,6 @@ def logout():
     session.pop('logged_in', None)
     flash('You were logged out')
     return redirect(url_for('show_entries'))
-
-'''
 
 
 
