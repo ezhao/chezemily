@@ -1,0 +1,60 @@
+{% extends "layout.html" %}
+{% block title %}Stickers{% endblock %}
+
+
+
+{% block head %}
+  {{ super() }}
+  <style type="text/css">
+  	.animated-sticker {
+	  }
+  </style>
+	<script async src="/static/stickers.js"></script>
+{% endblock %}
+
+
+
+
+{% block content %}
+  {% if session.logged_in %}
+    <form action="{{ url_for('add_sticker') }}" method=post class=add-sticker>
+      <dl>
+        <dt>File:
+        <dd><input type=text size=30 name=file>
+
+        <dt>Height:
+        <dd><input type=number size=30 name=height>
+        <dt>Width:
+        <dd><input type=number size=30 name=width>
+        <dt>Full Height:
+        <dd><input type=number size=30 name=fullheight>
+        <dt>Full Width:
+        <dd><input type=number size=30 name=fullwidth>
+        <dt>Offset X:
+        <dd><input type=number size=30 name=offsetx>
+        <dt>Offset Y:
+        <dd><input type=number size=30 name=offsety>
+        <dt>Animation Offset X:
+        <dd><input type=number size=30 name=animationx>
+        <dt>Animation Offset Y:
+        <dd><input type=number size=30 name=animationy>
+        <dt>Grid Width:
+        <dd><input type=number size=30 name=gridwidth>
+
+        <dd><input type=submit value=Add>
+      </dl>
+    </form>
+  {% endif %}
+
+  <ul class=stickers>
+  {% for sticker in stickers %}
+    <li>
+			<div class=animated-sticker style="height: 64px; width: 52px; background-image: url(/static/stickers/{{ sticker.file }}); background-size: 124px 148px; background-position: -5px -5px;">
+			</div>
+		</li>
+  {% else %}
+    <li><em>Unbelievable.  No stickers here so far</em></li>
+  {% endfor %}
+  </ul>
+{% endblock %}
+

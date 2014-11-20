@@ -3,6 +3,7 @@ from flask import render_template
 from flask import request, session, g, redirect, url_for, abort, flash
 import os
 from flask.ext.sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 # Create application
 app = Flask(__name__)
@@ -13,7 +14,8 @@ app.config.update(dict(
     SQLALCHEMY_DATABASE_URI=os.environ['DATABASE_URL'],
     SECRET_KEY='2g2JXhqfutWCzRBAnuUpTRVNoneadventureatatimebaconandburrata',
     USERNAME='snowman',
-    PASSWORD='pumpkin'
+    PASSWORD='pumpkin',
+    PC_NAME=['peter', 'moop', 'peter cottle', 'peter michael cottle'],
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
@@ -56,9 +58,250 @@ class Entries(db.Model):
         return '<Title %r>' % self.title
 
 
+class Sticker(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    file = db.Column(db.String(80))
+    height = db.Column(db.Integer)
+    width = db.Column(db.Integer)
+    fullheight = db.Column(db.Integer)
+    fullwidth = db.Column(db.Integer)
+    offsetx = db.Column(db.Integer)
+    offsety = db.Column(db.Integer)
+    animationx = db.Column(db.Integer)
+    animationy = db.Column(db.Integer)
+    gridwidth = db.Column(db.Integer)
+    gridsize = db.Column(db.Integer)
+
+    def __init__(self, file, height, width, fullheight, fullwidth, offsetx, offsety, animationx, animationy, gridwidth, gridsize):
+        self.file = file
+        self.height = height
+        self.width = width
+        self.fullheight = fullheight
+        self.fullwidth = fullwidth
+        self.offsetx = offsetx
+        self.offsety = offsety
+        self.animationx = animationx
+        self.animationy = animationy
+        self.gridwidth = gridwidth
+        self.gridsize = gridsize
+
+    def __repr__(self):
+        return '<%r>' % self.file
+
+class StickerTag(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    keyword = db.Column(db.String(40))
+    sticker_id = db.Column(db.Integer)
+
+    def __init__(self, keyword, sticker_id):
+        self.keyword = keyword
+        self.sticker_id = sticker_id
+
+    def __repr__(self):
+        return '<%r - %r>' % (self.keyword, self.sticker_id)
+
+class PCResponse(db.Model):
+    question = db.Column(db.String(100), primary_key=True)
+    answer = db.Column(db.String(100))
+    ts = db.Column(db.DateTime)
+
+    def __init__(self, question, answer):
+        self.question = question
+        self.answer = answer
+        self.ts = datetime.utcnow()
+
+    def __repr__(self):
+        return '<%r - %r - %r>' % (self.question, self.answer, self.ts)
+
 ############################
-# Pull this stuff together #
+# Routes for Stickers      #
 ############################
+
+@app.route('/stickers')
+def show_stickers():
+    stickers = Sticker.query.all()
+    print "Emily printing the stickers", stickers
+    return render_template('stickers.html', stickers=stickers)
+
+@app.route('/stickers/add', methods=['POST'])
+def add_sticker():
+    if not session.get('logged_in'):
+        abort(401)
+    db.session.add(Sticker(
+        request.form['file'],
+        request.form['height'],
+        request.form['width'],
+        request.form['fullheight'],
+        request.form['fullwidth'],
+        request.form['offsetx'],
+        request.form['offsety'],
+        request.form['animationx'],
+        request.form['animationy'],
+        request.form['gridwidth'],
+        request.form['gridsize']
+        ))
+    db.session.commit()
+    flash('New sticker was successfully posted')
+    return redirect(url_for('show_stickers'))
+
+
+############################
+# Routes for SF Tour       #
+############################
+
+def pc_get_latest():
+    if not session.get('pc_logged_in'):
+        return 'pc_login'
+    if not PCResponse.query.get("Avatar"):
+        return 'pc_avatar_picker'
+    return 'pc_login'
+
+@app.route('/pc')
+def pc():
+    return redirect(url_for(pc_get_latest()))
+
+@app.route('/pc/login', methods=['GET', 'POST'])
+def pc_login():
+    error = None
+    if request.method == 'POST':
+        if request.form['name'].lower() not in app.config['PC_NAME']:
+            error = 'Try again!'
+        else:
+            session['pc_logged_in'] = True
+            return redirect(url_for('pc'))
+    return render_template('pc.html', page="login", error=error)
+
+@app.route('/pc/logout')
+def pc_logout():
+    session.pop('pc_logged_in', None)
+    return redirect(url_for('pc'))
+
+@app.route('/pc/avatar')
+def pc_avatar_picker():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    avatars = [
+        "outdoors",
+        "casual",
+        "classy",
+    ]
+    return render_template('pc.html', page="avatar", avatars=avatars)
+
+@app.route('/pc/activities')
+def pc_activity_picker():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    activities = [
+        dict(activity='katanaya', time_of_day=-1, image='ramen.jpg'),
+        dict(activity='wilson_wilson', time_of_day=-1, image='whiskey.jpg'),
+        dict(activity='monks_kettle', time_of_day=-1, image='belgian.jpg'),
+        dict(activity='bootie', time_of_day=-1, image='dance.jpg'),
+        dict(activity='corona_heights_night', time_of_day=-1, image='hillnight.jpg'),
+    ]
+    return render_template('pc.html', page="activity", activities=activities)
+
+@app.route('/pc/day')
+def pc_day_picker():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    days = [
+        "Friday",
+        "Saturday",
+        "Sunday",
+    ]
+    return render_template('pc.html', page="day", days=days)
+
+@app.route('/pc/train')
+def pc_train_picker():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    dayResponse = PCResponse.query.get("Day")
+    day = dayResponse.answer if dayResponse else None
+    trains = []
+    if day == "Friday":
+        # http://www.caltrain.com/schedules/weekdaytimetable.html
+        trains = [
+            dict(arrive="6:47pm", depart="6:06pm"),
+            dict(arrive="7:26pm", depart="6:43pm"),
+            dict(arrive="7:43pm", depart="6:54pm"),
+            dict(arrive="8:02pm", depart="7:10pm"),
+            ]
+    elif day in ("Saturday", "Sunday"):
+        # http://www.caltrain.com/schedules/weekend-timetable.html
+        trains = [
+            dict(arrive="5:38pm", depart="4:31pm"),
+            dict(arrive="6:41pm", depart="5:58pm"),
+            dict(arrive="7:38pm", depart="6:31pm"),
+            ]
+    return render_template('pc.html', page="train", trains=trains)
+
+@app.route('/pc/done')
+def pc_done():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    return render_template('pc.html', page="done")
+
+@app.route('/pc/quiz')
+def pc_quiz():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    foodResponse = PCResponse.query.get("Foods liked")
+    foodnoResponse = PCResponse.query.get("Foods disliked")
+    drinksResponse = PCResponse.query.get("Drinks")
+    drinks = []
+    if drinksResponse:
+        drinks = drinksResponse.answer.split(", ")
+    drinks = [drink.strip() for drink in drinks]
+    drinkList = []
+    for drink in ["Whiskey", "Tequila", "Wine", "Craft beer"]:
+        drinkList.append((drink, "checked" if drink in drinks else ""))
+    return render_template('pc.html', page="quiz",
+                                      foodResponse = foodResponse,
+                                      foodnoResponse = foodnoResponse,
+                                      drinkList = drinkList)
+
+@app.route('/pc/summary')
+def pc_summary():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    dayResponse = PCResponse.query.get("Day")
+    trainResponse = PCResponse.query.get("Train")
+    foodResponse = PCResponse.query.get("Foods liked")
+    foodnoResponse = PCResponse.query.get("Foods disliked")
+    drinksResponse = PCResponse.query.get("Drinks")
+    return render_template('pc.html', page="summary",
+                                      dayResponse = dayResponse,
+                                      trainResponse = trainResponse,
+                                      foodResponse = foodResponse,
+                                      foodnoResponse = foodnoResponse,
+                                      drinksResponse = drinksResponse)
+
+@app.route('/pc/clear')
+def pc_clear():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    PCResponse.query.delete()
+    db.session.commit()
+    return redirect(url_for(pc_get_latest()))
+
+@app.route('/pc/answer', methods=['POST'])
+def pc_answer():
+    if not session.get('pc_logged_in'):
+        abort(401)
+    obj = PCResponse(request.form['question'], request.form['answer'])
+    print obj
+    db.session.merge(obj)
+    if request.form['question'] == 'Day':
+        trainResponse = PCResponse.query.get("Train")
+        if trainResponse:
+            db.session.delete(trainResponse)
+    db.session.commit()
+    return url_for(pc_get_latest())
+
+
+
+########################################################################################
+
 # Routes for fake blog application and other testing
 @app.route('/app')
 def show_entries():

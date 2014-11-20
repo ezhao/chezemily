@@ -1,0 +1,140 @@
+.error {
+    font-family: 'Open Sans', Helvetica;
+    font-size:24px;
+}
+.h1-pc-blue {
+    font-size: 48px;
+	font-family: 'Open Sans', Helvetica;
+	text-align: center;
+	margin-bottom:60px;
+	margin-top:60px;
+    color: #2284CE;
+}
+.center {
+	text-align: center;
+    margin: 0 auto;
+}
+.pc-blue-button {
+	margin:60px 0;
+}
+.h1-pc, .p-pc {
+	margin-left: 40px;
+}
+.div-center {
+	display: table-cell;
+	vertical-align: middle;
+	text-align: center;
+}
+.ul-choices {
+	text-align: center;
+	padding-bottom: 30px;
+}
+.li-choice {
+	display: inline-block;
+	margin: 10px;
+}
+.quiz-answer {
+	margin-left: 40px;
+	margin-right: 40px;
+}
+.quiz-button {
+	margin-left: 40px;
+}
+.div-avatar {
+	background-color: #D8D8D8;
+	height: 144px;
+	width: 122px;
+	-webkit-clip-path: polygon(61px 0px, 122px 35px, 122px 109px, 61px 144px, 0px 109px, 0px 35px, 61px 0px);
+	clip-path: polygon(61px 0px, 122px 35px, 122px 109px, 61px 144px, 0px 109px, 0px 35px, 61px 0px);
+}
+.div-avatar-selected {
+	background-color: #2284CE;
+}
+.li-choice-avatar {
+	display: inline-block;
+	margin: 0px 30px 0px 30px;
+	cursor: pointer;
+}
+.pc-avatar {
+	height:140px;
+	width:62.5px;
+	margin-top:15px;
+	-webkit-clip-path: polygon(32px -15px, 93px 20px, 93px 94px, 32px 129px, -29px 94px, -29px 20px, 32px -15px);
+	clip-path: polygon(32px -15px, 93px 20px, 93px 94px, 32px 129px, -29px 94px, -29px 20px, 32px -15px);
+}
+.img-activity {
+    height:250px;
+    width:250px;
+    border:8px solid #E7ECF1;
+    box-shadow:3px 3px 10px rgba(0,0,0, 0.03);
+}
+.img-activity-selected {
+    border:8px solid #2284CE;
+}
+.li-choice-activity {
+	display: inline-block;
+	margin: 20px;
+}
+.div-day {
+	background-color: #E1E1E1;
+    font-family: 'Open Sans', Helvetica;
+    font-size:24px;
+    color:white;
+    border-radius: 50%;
+	height: 160px;
+	width: 160px;
+}
+.div-day-selected {
+	background-color: #2284CE;
+}
+.li-day {
+    margin: 10 25px;
+}
+.img-train {
+    height:161px;
+    width:100px;
+    margin-top:20px;
+}
+.li-train {
+    margin: 10px 20px;
+}
+.div-train-top {
+    font-family: 'Open Sans', Helvetica;
+    font-size:18px;
+    color:#2284CE;
+    width: 160px;
+    height: 60px;
+}
+.div-train-bottom {
+    font-family: 'Open Sans', Helvetica;
+    font-size:24px;
+    color:#2284CE;
+    width: 160px;
+    margin-top:2px;
+}
+.div-train {
+    height: 240px;
+    width: 160px;
+    border: 5px solid #FFF;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    border-radius: 8px;
+}
+.li-train-really-selected .div-train, .li-train-selected .div-train {
+    border: 5px solid #2284CE;
+    -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+    -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+    box-sizing: border-box;         /* Opera/IE 8+ */
+    border-radius: 8px;
+}
+.li-train-chosen .div-train-top {
+    color:#B8E986;
+}
+.li-train-chosen .div-train {
+    border: 5px solid #B8E986;
+    border-radius: 8px;
+}
+.login-name {
+    width:360px;
+}
