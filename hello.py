@@ -163,7 +163,7 @@ def pc_login():
     error = None
     if request.method == 'POST':
         if request.form['name'].lower() not in app.config['PC_NAME']:
-            error = 'Try again!'
+            error = 'Nope'
         else:
             session['pc_logged_in'] = True
             return redirect(url_for('pc'))
