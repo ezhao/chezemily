@@ -33,7 +33,7 @@ $(function() {
         $(".pc-blue-button").show();
     });
 
-    $(".img-activity").click(function() {
+    $(".img-activity-listen").click(function() {
         var pcQuestion = "Activities";
         var pcAnswer = [];
         window.A = this;

@@ -1,4 +1,4 @@
-{% extends "layout.html" %}
+{% extends "layout_light.html" %}
 {% block title %}San Francisco Tour{% endblock %}
 
 
@@ -20,8 +20,17 @@
 	<div class="center login-name">
 	  {% if error %}<p class="error">{{ error }}{% endif %}
 	  <form action="{{ url_for('pc_login') }}" method=post>
-				<input class="form-control input-lg login-name" type="text" name="name" placeholder="Enter your name">
+				<input class="form-control input-lg login-name" style="width:360px;" type="text" name="name" placeholder="Type and hit enter">
 	  </form>
+	</div>
+
+
+
+	{% elif page=="invite" %}
+	<h1 class=h1-pc-blue>Want to visit me in San Francisco this weekend?</h1>
+	<div class=center>
+		<img src="/static/pc/san-francisco.png"><br/>
+		<a href="{{ url_for('pc_avatar_picker') }}" style="width:280px;" class="btn btn-primary btn-lg pc-blue-button" role="button">Yes!</a>
 	</div>
 
 
@@ -36,7 +45,7 @@
 				<img class=pc-avatar src="/static/pc/{{avatar}}.png"/>
 		{% endfor %}
 	</ul>
-	<p class=center><a href="{{ url_for('pc_activity_picker') }}" style="display:none;" class="btn btn-default btn-lg pc-blue-button" role="button">What's next?</a></p>
+	<p class=center><a href="{{ url_for('pc_activity_picker') }}" style="display:none;" class="btn btn-primary btn-lg pc-blue-button" role="button">What's next?</a></p>
 
 
 
@@ -49,12 +58,12 @@
 			{% for activity in activities %}
 	    <li class=li-choice-activity>
 				<div class="div-center div-activity">
-					<img class=img-activity pc-answer={{activity['activity']}} src="/static/pc/{{activity['image']}}"/>
+					<img class="img-activity img-activity-listen" pc-answer={{activity['activity']}} src="/static/pc/{{activity['image']}}"/>
 			{% endfor %}
 		</ul>
 	</div>
 
-	<p class=center><a href="{{ url_for('pc_day_picker') }}" class="btn btn-default btn-lg pc-blue-button" role="button">Next</a></p>
+	<p class=center><a href="{{ url_for('pc_day_picker') }}" class="btn btn-primary btn-lg pc-blue-button" role="button">Next</a></p>
 
 
 
@@ -68,14 +77,15 @@
 			<div class="div-center div-day" pc-answer={{day}}>{{day}}
 		{% endfor %}
 	</ul>
-	<p class=center><a href="{{ url_for('pc_train_picker') }}" class="btn btn-default btn-lg pc-blue-button" style="display:none;" role="button">Pick a train</a></p>
+	<p class=center><a href="{{ url_for('pc_train_picker') }}" class="btn btn-primary btn-lg pc-blue-button" style="display:none;" role="button">Pick a train</a></p>
+
 
 
 
 	{% elif page=="train" %}
 	<h1 class=h1-pc-blue>Okay, when should I expect you?</h1>
 
-  <ul class=ul-choices>
+  <ul style="padding-top:0;" class=ul-choices>
 		{% for train in trains %}
     <li class="li-choice li-train" pc-answer={{train["arrive"]}}>
 			<div class="div-train-top"><span style="display:none;">Departs Palo Alto {{ train["depart"] }}</span></div>
@@ -85,7 +95,7 @@
 			</div>
 	  {% endfor %}
 	</ul>
-	<p class=center><a href="{{ url_for('pc_done') }}" class="btn btn-default btn-lg pc-blue-button" style="display:none;" role="button">Done!</a></p>
+	<p class=center><a href="{{ url_for('pc_done') }}" class="btn btn-primary btn-lg pc-blue-button" style="display:none;" role="button">Done!</a></p>
 
 
 
@@ -110,13 +120,33 @@
 		{% endfor %}
 	</div>
 	
-	<a href="{{ url_for('pc_summary') }}" class="btn btn-default btn-lg quiz-button" role="button">Summary of answers</a>
+	<a href="{{ url_for('pc_summary') }}" class="btn btn-primary btn-lg quiz-button" role="button">Summary of answers</a>
 
 
 
 
 	{% elif page=="done" %}
 	<h1 class=h1-pc-blue>See you soon!</h1>
+	
+	<div class=center>
+	  <ul style="padding-top:10px;" class=ul-choices>
+			{% for activity in activities %}
+	    <li class=li-choice-activity>
+				<div class="div-center div-activity">
+					<img class="img-activity img-activity-small" src="/static/pc/{{activity['image']}}"/>
+			{% endfor %}
+		</ul>
+	
+	  <ul style="padding-top:0;" class=ul-choices>
+	    <li class="li-choice li-train-really-selected">
+				<div class="div-train-top"><span>Departs Palo Alto {{ train["depart"] }}</span></div>
+				<div class="div-train">
+					<img class="img-train" src="/static/pc/train.gif" />
+					<div class="div-train-bottom">{{ train["arrive"] }}</div>
+				</div>
+		</ul>
+	
+	</div>
 
 
 

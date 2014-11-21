@@ -1,0 +1,18 @@
+<!doctype html>
+<html>
+	<head>
+		{% block head %}
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<title>{% block title %}{% endblock %} - Emily</title>
+		{% endblock %}
+	</head>
+	<body>
+		<div id="content">
+			{% for message in get_flashed_messages() %}<div class=flash>{{ message }}</div>{% endfor %}
+			{% block content %}{% endblock %}
+		</div>
+	</body>
+</html>
