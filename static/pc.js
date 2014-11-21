@@ -89,25 +89,4 @@ $(function() {
         this.classList.add("li-train-really-selected");
         $(".pc-blue-button").show();
     });
-
-    $("#quiz-foodlike").on('change keyup paste', function(e) {
-        var pcQuestion = "Foods liked";
-        var pcAnswer = e.target.value;
-        submitAnswer(pcQuestion, pcAnswer);
-    });
-
-    $("#quiz-fooddislike").on('change keyup paste', function(e) {
-        var pcQuestion = "Foods disliked";
-        var pcAnswer = e.target.value;
-        submitAnswer(pcQuestion, pcAnswer);
-    });
-    
-    $(".checkbox").click(function() {
-        var pcQuestion = "Drinks";
-        var pcAnswer = []
-        $.each($("input:checked"), function(){            
-             pcAnswer.push($(this.parentElement).text());
-        });
-        submitAnswer(pcQuestion, pcAnswer.join(', '));
-    })
 });

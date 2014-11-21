@@ -284,25 +284,6 @@ def pc_done():
             selectedActivities.append(activity)
     return render_template('pc.html', page="done", train=selectedTrain, activities=selectedActivities)
 
-@app.route('/pc/quiz')
-def pc_quiz():
-    if not session.get('pc_logged_in'):
-        abort(401)
-    foodResponse = PCResponse.query.get("Foods liked")
-    foodnoResponse = PCResponse.query.get("Foods disliked")
-    drinksResponse = PCResponse.query.get("Drinks")
-    drinks = []
-    if drinksResponse:
-        drinks = drinksResponse.answer.split(", ")
-    drinks = [drink.strip() for drink in drinks]
-    drinkList = []
-    for drink in ["Whiskey", "Tequila", "Wine", "Craft beer"]:
-        drinkList.append((drink, "checked" if drink in drinks else ""))
-    return render_template('pc.html', page="quiz",
-                                      foodResponse = foodResponse,
-                                      foodnoResponse = foodnoResponse,
-                                      drinkList = drinkList)
-
 @app.route('/pc/summary')
 def pc_summary():
     if not session.get('pc_logged_in'):
