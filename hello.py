@@ -91,11 +91,11 @@ class Sticker(db.Model):
 class StickerTag(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     keyword = db.Column(db.String(40))
-    sticker_id = db.Column(db.Integer)
+    sticker_id = db.Column(db.Integer, db.ForeignKey(Sticker.id))
 
-    def __init__(self, keyword, sticker_id):
+    def __init__(self, keyword, sticker):
         self.keyword = keyword
-        self.sticker_id = sticker_id
+        self.sticker_id = sticker.id
 
     def __repr__(self):
         return '<%r - %r>' % (self.keyword, self.sticker_id)
@@ -114,7 +114,7 @@ class PCResponse(db.Model):
         return '<%r - %r - %r>' % (self.question, self.answer, self.ts)
 
 ############################
-# Routes for Stickers      #
+# Routes for stickers      #
 ############################
 
 @app.route('/stickers')
@@ -123,30 +123,49 @@ def show_stickers():
     print "Emily printing the stickers", stickers
     return render_template('stickers.html', stickers=stickers)
 
+@app.route('/stickers/<id>')
+def show_sticker(id):
+    sticker = Sticker.query.get(id)
+    return render_template('sticker.html', sticker=sticker)
+
+STICKER_COLS = ['file', 'height', 'width', 'fullheight', 'fullwidth', 'offsetx', 'offsety', 'animationx', 'animationy', 'gridwidth', 'gridsize']
+
 @app.route('/stickers/add', methods=['POST'])
 def add_sticker():
     if not session.get('logged_in'):
         abort(401)
-    db.session.add(Sticker(
-        request.form['file'],
-        request.form['height'],
-        request.form['width'],
-        request.form['fullheight'],
-        request.form['fullwidth'],
-        request.form['offsetx'],
-        request.form['offsety'],
-        request.form['animationx'],
-        request.form['animationy'],
-        request.form['gridwidth'],
-        request.form['gridsize']
-        ))
+    params = dict()
+    for sticker_col in STICKER_COLS:
+        params[sticker_col] = request.form[sticker_col]
+    db.session.add(Sticker(**params))
     db.session.commit()
     flash('New sticker was successfully posted')
     return redirect(url_for('show_stickers'))
 
+@app.route('/stickers/edit', methods=['POST'])
+def edit_sticker():
+    if not session.get('logged_in'):
+        abort(401)
+    try:
+        stickerid = int(request.form['stickerid'])
+    except ValueError:
+        flash('Bad sticker id. We got \'%s\', which may not be an integer' % request.form['stickerid'])
+        return redirect(url_for('show_stickers'))
+    sticker = Sticker.query.get(stickerid)
+    for sticker_col in STICKER_COLS:
+        setattr(sticker, sticker_col, request.form[sticker_col])
+    db.session.commit()
+    flash('Sticker was successfully edited')
+    return redirect(url_for('show_sticker', id=stickerid))
+
+@app.route('/stickers/delete/<id>')
+def delete_sticker(id):
+    db.session.delete(Sticker.query.get(id))
+    db.session.commit()
+    return redirect(url_for('show_stickers'))
 
 ############################
-# Routes for SF Tour       #
+# Routes for pc            #
 ############################
 
 def pc_get_latest():
@@ -284,22 +303,6 @@ def pc_done():
             selectedActivities.append(activity)
     return render_template('pc.html', page="done", train=selectedTrain, activities=selectedActivities)
 
-@app.route('/pc/summary')
-def pc_summary():
-    if not session.get('pc_logged_in'):
-        abort(401)
-    dayResponse = PCResponse.query.get("Day")
-    trainResponse = PCResponse.query.get("Train")
-    foodResponse = PCResponse.query.get("Foods liked")
-    foodnoResponse = PCResponse.query.get("Foods disliked")
-    drinksResponse = PCResponse.query.get("Drinks")
-    return render_template('pc.html', page="summary",
-                                      dayResponse = dayResponse,
-                                      trainResponse = trainResponse,
-                                      foodResponse = foodResponse,
-                                      foodnoResponse = foodnoResponse,
-                                      drinksResponse = drinksResponse)
-
 @app.route('/pc/clear')
 def pc_clear():
     if not session.get('pc_logged_in'):
@@ -384,12 +387,6 @@ def about():
 @app.route('/studio/')
 def studio():
     return render_template('studio.html')
-
-@app.route('/project/<project>/')
-def project(project=None):
-    if project == 'setlist':
-        return render_template('setlist.html')
-    return render_template('hello.html', name='test')
 
 
 # Run
