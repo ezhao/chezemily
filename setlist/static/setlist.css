@@ -1,0 +1,161 @@
+@grid-columns:              12;
+@grid-gutter-width:         30px;
+@grid-float-breakpoint:     768px;
+
+html, body {
+    overflow: hidden;
+}
+
+body > div {
+    height:     100%;
+    overflow:   scroll;
+}
+
+html, body, #div-outer {
+    height: 100%;
+    min-height: 100%;
+    width: 100%;
+    min-width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#div-outer {
+    background-color: #FF0000;
+}
+
+#div-listview {
+    overflow:   scroll;
+    background-color: #5B756E;
+    height: 100%;
+    width: 280px;
+    margin: 0;
+    float: left;
+    position: fixed;
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+#div-content {
+    background-color: #FFFFFF;
+    margin: 0 0 0 280px; /* width of div-listview */
+    padding: 50px;
+}
+
+.setlist-lyrics {
+    white-space: pre-wrap;
+    font: normal 10pt "Open Sans";
+    letter-spacing: 0.5px;
+    line-height: 180%;
+}
+
+.setlist-row-top {
+    border-bottom: 2px solid #F5F5F5;
+    padding-bottom: 20px;
+}
+
+.setlist-row-bot {
+    padding-top: 30px;
+}
+
+.setlist-row {
+}
+
+.setlist-row-left {
+    float: left;
+    width: 110px;
+}
+
+.setlist-row-center {
+    padding: 0 0 0 110px;  /* width of setlist-row-left */
+}
+
+.setlist-row-right {
+    float: right;
+}
+
+.h1-artist {
+    padding: 0px;
+    margin: -8px 0 0 0;
+    font: lighter 24pt "Open Sans";
+    color: #504150;
+}
+
+.h2-title {
+    padding: 0px;
+    margin: 4px 0 0 0;
+    font: lighter 16pt "Open Sans";
+    color: #CFC3CF;
+}
+
+.round-icon {
+    border-radius: 50%;
+    box-shadow: 0px 1px 4px 0px rgba(0, 0, 0, 0.5);
+}
+
+.div-search {
+    padding: 20px;
+}
+
+.input-search {
+    width: 240px;
+}
+
+#setlist-list {
+    margin: 0px;
+    padding: 0px;
+}
+
+#setlist-list .setlist-listitem a {
+    background-color: #618379;
+    display: block;
+    text-decoration: none;
+    padding: 15px 20px;
+    margin: 6px 0;
+}
+
+#setlist-list .setlist-listitem a:hover {
+    background-color: #6A9386;
+}
+
+#setlist-list .setlist-listitem .setlist-listitem-artist {
+    font: lighter 12pt "Open Sans";
+    color: #CCDAD7;
+}
+
+#setlist-list .setlist-listitem .setlist-listitem-title {
+    font: lighter 10pt "Open Sans";
+    color: #9EBBBE;
+}
+
+#setlist-list .setlist-listitem .setlist-selected {
+    background-color: #FFFFFF;
+    cursor: default;
+}
+
+#setlist-list .setlist-listitem .setlist-selected:hover {
+    background-color: #FFFFFF;
+}
+
+#setlist-list .setlist-listitem .setlist-selected .setlist-listitem-artist {
+    color: #775F77;
+}
+
+#setlist-list .setlist-listitem .setlist-selected .setlist-listitem-title {
+    color: #B6A4B6;
+}
+
+#add-button {
+    position: absolute;
+    display: block;
+    bottom: 25px;
+    left: 25px;
+    height: 40px;
+    width: 40px;
+    background-color: #D420D5;
+    padding: 10px 14px;
+    color: #FFFFFF;
+}
+
+#add-button:hover {
+    background-color: #E854E9;
+}

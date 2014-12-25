@@ -100,31 +100,6 @@
 
 
 
-	{% elif page=="quiz" %}
-	<h1 class=h1-pc>Answer some questions</h1>
-
-	<div class="form-group quiz-answer">
-	  <label class="control-label" for="quiz-foodlike">What are some foods you really like</label>
-		<textarea class="form-control" id="quiz-foodlike" rows="2">{{foodResponse.answer if foodResponse else ""}}</textarea>
-	</div>
-
-	<div class="form-group quiz-answer">
-	  <label class="control-label" for="quiz-fooddislike">What are some foods you don't like or can't eat</label>
-		<textarea class="form-control" id="quiz-fooddislike" rows="2">{{foodnoResponse.answer if foodnoResponse else ""}}</textarea>
-	</div>
-
-	<div class="form-group quiz-answer">
-	  <label class="control-label">Pick some of these
-		{% for drink, checked in drinkList %}
-		<div class="checkbox"><label><input type="checkbox" value="" {{checked}}>{{drink}}</div>
-		{% endfor %}
-	</div>
-	
-	<a href="{{ url_for('pc_summary') }}" class="btn btn-primary btn-lg quiz-button" role="button">Summary of answers</a>
-
-
-
-
 	{% elif page=="done" %}
 	<h1 class=h1-pc-blue>See you soon!</h1>
 	
@@ -150,42 +125,6 @@
 
 
 
-
-	{% elif page=="summary" %}
-	<h1 class=h1-pc>Summary</h1>
-	
-	<form class="form-horizontal" role="form">
-
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label"><a href="{{url_for('pc_day_picker')}}">Day</a></label>
-	    <div class="col-sm-10"><p class="form-control-static">{{dayResponse.answer if dayResponse else None}}</p>
-			</div>
-	  </div>
-
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label"><a href="{{url_for('pc_train_picker')}}">Train</a></label>
-	    <div class="col-sm-10"><p class="form-control-static">{{trainResponse.answer if trainResponse else None}}</p>
-			</div>
-	  </div>
-
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label"><a href="{{url_for('pc_quiz')}}">Foods liked</a></label>
-	    <div class="col-sm-10"><p class="form-control-static">{{foodResponse.answer if foodResponse else None}}</p>
-			</div>
-	  </div>
-
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label"><a href="{{url_for('pc_quiz')}}">Foods disliked</a></label>
-	    <div class="col-sm-10"><p class="form-control-static">{{foodnoResponse.answer if foodnoResponse else None}}</p>
-			</div>
-	  </div>
-
-	  <div class="form-group">
-	    <label class="col-sm-2 control-label"><a href="{{url_for('pc_quiz')}}">Drinks</a></label>
-	    <div class="col-sm-10"><p class="form-control-static">{{drinksResponse.answer if drinksResponse else None}}</p>
-			</div>
-	  </div>
-	</form>
 
 	{% endif %}
 

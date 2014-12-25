@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+	<head>
+		<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+		<script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+	  <link rel="stylesheet" href="{{ url_for('setlist.static', filename='setlist.css') }}">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>Setlist - Emily</title>
+	</head>
+
+
+	<body>
+		<div id="div-outer">
+		  <div id="div-listview">
+				<div class="div-search">
+					<input type="search" class="input-search form-control" placeholder="Search...">
+				</div>
+				<ul id="setlist-list">
+					{% for song in songs %}
+					<li class="setlist-listitem">
+						{% if song['selected'] %}
+						<a class="setlist-selected">
+						{% else %}
+						<a href="{{ url_for('setlist.setlist_song', songid=song['id']) }}">
+						{% endif %}
+							<p class="setlist-listitem-artist">{{ song['artist'] }}</p>
+							<p class="setlist-listitem-title">{{ song['title'] }}</p>
+						</a>
+					</li>
+					{% endfor %}
+				</ul>
+			</div>
+
+		  <div id="div-content">
+				{% if page=="add" %}
+	      <h1>Add a new song</h1>
+			  <form action="{{ url_for('setlist.setlist_add', songid=songid) }}" method=post>
+					<label class="control-label" for="input-artist">Artist</label>
+					<input type=text class="form-control" id="input-artist" name=artist placeholder="Taylor Swift">
+
+					<label class="control-label" for="input-title">Song Title</label>
+					<input type=text class="form-control" id="input-title" name=title placeholder="Shake It Off">
+
+					<label class="control-label" for="input-lyrics">Lyrics</label>
+					<textarea class="form-control" id="input-lyrics" name=lyrics rows="12"></textarea>
+					<button type="submit" class="btn btn-primary">Add Song</button>
+			  </form>
+
+
+
+
+				{% elif selected_song and edit %}
+				<h1>Editing</h1>
+			  <form action="{{ url_for('setlist.setlist_edit', songid=songid) }}" method=post>
+					<label class="control-label" for="input-artist">Artist</label>
+					<input type=text class="form-control" id="input-artist" name=artist value="{{ selected_song.artist }}">
+
+					<label class="control-label" for="input-title">Song Title</label>
+					<input type=text class="form-control" id="input-title" name=title value="{{ selected_song.title }}">
+
+					<label class="control-label" for="input-lyrics">Lyrics</label>
+					<textarea class="form-control" id="input-lyrics" name=lyrics rows="12">{{ selected_song.lyrics }}</textarea>
+					<button type="submit" class="btn btn-primary">Save</button>
+			  </form>
+
+
+
+				{% elif selected_song %}
+				<div class="setlist-row setlist-row-top">
+					<div class="setlist-row-left">
+						<img class="round-icon" src="{{ url_for('setlist.static', filename='taylor-swift.jpg') }}" height=64 width=64>
+					</div>
+					<div class="setlist-row-right">
+						<a href="{{ url_for('setlist.setlist_edit', songid=songid) }}"><span class="glyphicon glyphicon-pencil" aria-hidden="true"></span></a>
+					</div>
+					<div class="setlist-row-center">
+						<h1 class="h1-artist">{{ selected_song.artist }}</h1>
+						<h2 class="h2-title">{{ selected_song.title }}</h2>
+					</div>
+				</div>
+				<div class="setlist-row setlist-row-bot">
+					<div class="setlist-row-left"></div>
+					<div class="setlist-row-center">
+						<div class="setlist-lyrics">{{ selected_song.lyrics }}</div>
+					</div>
+				</div>
+
+
+
+				{% else %}
+				<h1>Couldn't find selected song {{ songid }}!</h1>
+
+
+
+				{% endif %}
+			</div>
+
+			<a id="add-button" class="round-icon" href="{{ url_for('setlist.setlist_add') }}">
+				<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+			</a>
+
+		</div>
+	</body>
+</html>

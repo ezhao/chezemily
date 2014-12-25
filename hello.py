@@ -1,6 +1,5 @@
 from flask import Flask
-from flask import render_template
-from flask import request, session, g, redirect, url_for, abort, flash
+from flask import render_template, request, session, g, redirect, url_for, abort, flash
 import os
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -113,6 +112,22 @@ class PCResponse(db.Model):
     def __repr__(self):
         return '<%r - %r - %r>' % (self.question, self.answer, self.ts)
 
+class SetlistSong(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    artist = db.Column(db.String(200))
+    title = db.Column(db.String(200))
+    youtubelink = db.Column(db.String(200))
+    lyrics = db.Column(db.Text)
+
+    def __init__(self, artist, title, youtubelink, lyrics):
+        self.artist = artist
+        self.title = title
+        self.youtubelink = youtubelink
+        self.lyrics = lyrics
+
+    def __repr__(self):
+        return "%s - %s" % (self.artist, self.title)
+
 ############################
 # Routes for stickers      #
 ############################
@@ -163,6 +178,8 @@ def delete_sticker(id):
     db.session.delete(Sticker.query.get(id))
     db.session.commit()
     return redirect(url_for('show_stickers'))
+
+
 
 ############################
 # Routes for pc            #
@@ -390,10 +407,9 @@ def studio():
 
 
 # Run
-def run_for_test():
-    app.debug = True
-    app.run()
-
 if __name__ == '__main__':
+    from setlist.setlist import setlist
+    app.register_blueprint(setlist, url_prefix='/setlist')
+
     app.debug = False # Only deploy with "False"
     app.run()
