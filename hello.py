@@ -406,10 +406,10 @@ def studio():
     return render_template('studio.html')
 
 
-# Run
+# Run locally
 if __name__ == '__main__':
     from setlist.setlist import setlist
     app.register_blueprint(setlist, url_prefix='/setlist')
 
-    app.debug = False # Only deploy with "False"
+    app.debug = True # Only deploy with "False"
     app.run()
