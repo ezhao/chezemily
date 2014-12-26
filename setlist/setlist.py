@@ -1,6 +1,5 @@
-from flask.ext.sqlalchemy import SQLAlchemy
-from flask import Blueprint, render_template, abort, request, redirect, url_for
-from hello import db, SetlistSong
+from flask import Blueprint, render_template, request, redirect, url_for
+from models import db, SetlistSong
 
 setlist = Blueprint('setlist', __name__,
                     template_folder='templates',

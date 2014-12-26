@@ -1,10 +1,5 @@
 from flask import Flask
-from flask import render_template, request, session, g, redirect, url_for, abort, flash
 import os
-from flask.ext.sqlalchemy import SQLAlchemy
-from datetime import datetime
-from setlist.setlist import setlist
-
 
 # Create application
 app = Flask(__name__)
@@ -19,4 +14,4 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
-app.register_blueprint(setlist, url_prefix='/setlist')
+
