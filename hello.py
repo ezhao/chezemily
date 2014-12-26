@@ -9,7 +9,6 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config.update(dict(
-    #DATABASE=os.path.join(app.root_path, 'flaskr.db'), #TODO(emily) investigate "Instance Folders"
     SQLALCHEMY_DATABASE_URI=os.environ['DATABASE_URL'],
     SECRET_KEY='2g2JXhqfutWCzRBAnuUpTRVNoneadventureatatimebaconandburrata',
     USERNAME='snowman',
