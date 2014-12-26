@@ -3,6 +3,7 @@ from flask import render_template, request, session, g, redirect, url_for, abort
 import os
 from flask.ext.sqlalchemy import SQLAlchemy
 from datetime import datetime
+from setlist.setlist import setlist
 
 
 # Create application
@@ -17,3 +18,5 @@ app.config.update(dict(
     PC_NAME=['peter', 'moop', 'peter cottle', 'peter michael cottle'],
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+
+app.register_blueprint(setlist, url_prefix='/setlist')
